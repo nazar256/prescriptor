@@ -32,7 +32,8 @@ class LoadPortionGenerator
             $urls = [];
             for ($i = 0; $i < $this->concurrency; $i++) {
                 $randomId = rand($this->minId, $this->maxId);
-                $urls[] = str_replace('{{ID}}', $randomId, $this->urlPattern);
+                $randomName = uniqid('name_', true);
+                $urls[] = str_replace(['{{ID}}', '{{NAME}}'], [$randomId, $randomName], $this->urlPattern);
             }
             yield $urls;
         } while ((microtime(true) - $start) < $this->durationSec);

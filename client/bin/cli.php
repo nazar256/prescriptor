@@ -41,7 +41,7 @@ use App\LoadRunner;
         // while actually we may not need to prealocate that many values as this is maximum calculated amount
         $esitmatedMaxRequests = $esitmatedMaxRequests > MAX_PREALLOCATED_STATS ? $esitmatedMaxRequests : MAX_PREALLOCATED_STATS;
 
-        $io->text('preparing for test, estimated max requests: ' . $esitmatedMaxRequests);
+        $io->text('preparing for test, preallocated requests: ' . $esitmatedMaxRequests);
 
         $statsAggregator = new StatsAggregator($esitmatedMaxRequests, [10, 25, 50, 75, 90, 95, 99, 100]);
         $loadGenerator = new LoadPortionGenerator($urlPattern, $minId, $maxId, $concurrency, $durationSec);

@@ -9,6 +9,7 @@ use App\JsonApi\Hydrator\Disease\CreateDiseaseHydrator;
 use App\JsonApi\Hydrator\Disease\UpdateDiseaseHydrator;
 use App\JsonApi\Transformer\DiseaseResourceTransformer;
 use App\Repository\DiseaseRepository;
+use FOD\DBALClickHouse\Connection;
 use Paknahad\JsonApiBundle\Controller\Controller;
 use Paknahad\JsonApiBundle\Helper\ResourceCollection;
 use Psr\Http\Message\ResponseInterface;
@@ -65,8 +66,16 @@ class DiseaseController extends Controller
     /**
      * @Route("/{id}", name="diseases_show", methods="GET")
      */
-    public function show(Disease $disease): ResponseInterface
+    public function show(Disease $disease, Request $request): ResponseInterface
     {
+        $patient = $request->get('patient', '');
+
+        //TODO: move to nice service, now I have neither time nor energy, sorry (don't take it too serious, its just a job application task)
+        $doctrine = $this->getDoctrine();
+        /** @var Connection $clickhouse */
+        $clickhouse = $doctrine->getConnection('clickhouse');
+        $clickhouse->insert('request_log', ['name' => $patient, 'date_time' => date('Y-m-d H:i:s'), 'disease_id' => $disease->getId()]);
+
         return $this->jsonApi()->respond()->ok(
             new DiseaseDocument(new DiseaseResourceTransformer()),
             $disease
@@ -99,7 +108,7 @@ class DiseaseController extends Controller
     /**
      * @Route("/{id}", name="diseases_delete", methods="DELETE")
      */
-    public function delete(Request $request, Disease $disease): ResponseInterface
+    public function delete(Disease $disease): ResponseInterface
     {
         $entityManager = $this->getDoctrine()->getManager();
         $entityManager->remove($disease);
