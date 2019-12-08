@@ -1,0 +1,343 @@
+swagger: '2.0'
+info:
+  description: ''
+  version: 1.0.0
+  title: 'Swagger JsonApi'
+  termsOfService: 'http://swagger.io/terms/'
+  license:
+    name: 'Apache 2.0'
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+host: localhost
+schemes:
+  - https
+  - http
+paths:
+  /diseases/:
+    get:
+      tags:
+        - diseases
+      summary: 'Disease List'
+      operationId: listDisease
+      produces:
+        - application/json
+      parameters: {  }
+      responses:
+        200:
+          description: 'successful operation'
+          schema:
+            type: object
+            properties:
+              jsonapi:
+                type: object
+                properties:
+                  version:
+                    type: string
+                    example: '1.0'
+              links:
+                type: object
+                properties:
+                  self:
+                    type: string
+                    example: '/diseases?page[number]=1&page[size]=100'
+                  first:
+                    type: string
+                    example: '/diseases?page[number]=1&page[size]=100'
+                  last:
+                    type: string
+                    example: '/diseases?page[number]=1&page[size]=100'
+                  prev:
+                    type: string
+                    example: 'null'
+                  next:
+                    type: string
+                    example: 'null'
+              data:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      format: int64
+                      example: 12
+                    type:
+                      type: string
+                      example: diseases
+                    attributes:
+                      $ref: '#/definitions/Disease'
+                    relationships:
+                      properties:
+                        drugs:
+                          type: array
+                          items:
+                            $ref: '#/definitions/Drug_relation'
+    post:
+      tags:
+        - diseases
+      summary: 'Add Disease'
+      operationId: addDisease
+      produces:
+        - application/json
+      parameters:
+        -
+          in: body
+          name: body
+          description: addDisease
+          required: true
+          schema:
+            type: object
+            properties:
+              data:
+                type: object
+                properties:
+                  type:
+                    type: string
+                    example: diseases
+                  attributes:
+                    $ref: '#/definitions/Disease'
+                  relationships:
+                    properties:
+                      drugs:
+                        type: array
+                        items:
+                          $ref: '#/definitions/Drug_relation'
+      responses:
+        200:
+          description: 'successful operation'
+          schema:
+            type: object
+            properties:
+              jsonapi:
+                type: object
+                properties:
+                  version:
+                    type: string
+                    example: '1.0'
+              links:
+                type: object
+                properties:
+                  self:
+                    type: string
+                    example: /diseases
+              data:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    format: int64
+                    example: 12
+                  type:
+                    type: string
+                    example: diseases
+                  attributes:
+                    $ref: '#/definitions/Disease'
+                  relationships:
+                    properties:
+                      drugs:
+                        type: array
+                        items:
+                          $ref: '#/definitions/Drug_relation'
+  '/diseases/{Disease_id}':
+    patch:
+      tags:
+        - diseases
+      summary: 'Edit Disease'
+      operationId: editDisease
+      produces:
+        - application/json
+      parameters:
+        -
+          in: body
+          name: body
+          description: editDisease
+          required: true
+          schema:
+            type: object
+            properties:
+              data:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    format: int64
+                    example: 12
+                  type:
+                    type: string
+                    example: diseases
+                  attributes:
+                    $ref: '#/definitions/Disease'
+                  relationships:
+                    properties:
+                      drugs:
+                        type: array
+                        items:
+                          $ref: '#/definitions/Drug_relation'
+        -
+          name: Disease_id
+          in: path
+          required: true
+          type: integer
+          format: int64
+      responses:
+        200:
+          description: 'successful operation'
+          schema:
+            type: object
+            properties:
+              jsonapi:
+                type: object
+                properties:
+                  version:
+                    type: string
+                    example: '1.0'
+              links:
+                type: object
+                properties:
+                  self:
+                    type: string
+                    example: /diseases
+              data:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    format: int64
+                    example: 12
+                  type:
+                    type: string
+                    example: diseases
+                  attributes:
+                    $ref: '#/definitions/Disease'
+                  relationships:
+                    properties:
+                      drugs:
+                        type: array
+                        items:
+                          $ref: '#/definitions/Drug_relation'
+    delete:
+      tags:
+        - diseases
+      summary: 'Delete Disease'
+      operationId: deleteDisease
+      produces:
+        - application/json
+      parameters:
+        -
+          name: Disease_id
+          in: path
+          required: true
+          type: integer
+          format: int64
+      responses:
+        200:
+          description: 'successful operation'
+          schema:
+            type: object
+            properties:
+              jsonapi:
+                type: object
+                properties:
+                  version:
+                    type: string
+                    example: '1.0'
+              links:
+                type: object
+                properties:
+                  self:
+                    type: string
+                    example: /diseases
+              data:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    format: int64
+                    example: 12
+                  type:
+                    type: string
+                    example: diseases
+                  attributes:
+                    $ref: '#/definitions/Disease'
+                  relationships:
+                    properties:
+                      drugs:
+                        type: array
+                        items:
+                          $ref: '#/definitions/Drug_relation'
+    get:
+      tags:
+        - diseases
+      summary: 'Get Disease'
+      operationId: viewDisease
+      produces:
+        - application/json
+      parameters:
+        -
+          name: Disease_id
+          in: path
+          required: true
+          type: integer
+          format: int64
+      responses:
+        200:
+          description: 'successful operation'
+          schema:
+            type: object
+            properties:
+              jsonapi:
+                type: object
+                properties:
+                  version:
+                    type: string
+                    example: '1.0'
+              links:
+                type: object
+                properties:
+                  self:
+                    type: string
+                    example: /diseases
+              data:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    format: int64
+                    example: 12
+                  type:
+                    type: string
+                    example: diseases
+                  attributes:
+                    $ref: '#/definitions/Disease'
+                  relationships:
+                    properties:
+                      drugs:
+                        type: array
+                        items:
+                          $ref: '#/definitions/Drug_relation'
+securityDefinitions:
+  api_key:
+    type: apiKey
+    name: api_key
+    in: header
+definitions:
+  Disease:
+    type: object
+    properties:
+      name:
+        type: string
+  Drug_relation:
+    type: object
+    properties:
+      type:
+        type: string
+        enum:
+          - drugs
+        example: drugs
+      id:
+        type: integer
+        minimum: 1
+        description: 'Drug ID'
+        example: 28
+externalDocs:
+  description: 'Find out more about Swagger'
+  url: 'http://swagger.io'

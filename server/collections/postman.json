@@ -1,0 +1,135 @@
+{
+    "info": {
+        "name": "json_api",
+        "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.1.0\/collection.json"
+    },
+    "item": [
+        {
+            "name": "Disease",
+            "description": "",
+            "item": [
+                {
+                    "name": "Disease List",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": "",
+                        "url": {
+                            "raw": "{{host}}\/diseases\/",
+                            "host": [
+                                "{{host}}"
+                            ],
+                            "path": [
+                                "\/diseases",
+                                ""
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Add Disease",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"data\": {\n        \"type\": \"diseases\",\n        \"attributes\": {\n            \"name\": \"string\"\n        },\n        \"relationships\": {\n            \"drugs\": {\n                \"data\": [\n                    {\n                        \"type\": \"drugs\",\n                        \"id\": \"1\"\n                    }\n                ]\n            }\n        }\n    }\n}"
+                        },
+                        "url": {
+                            "raw": "{{host}}\/diseases\/",
+                            "host": [
+                                "{{host}}"
+                            ],
+                            "path": [
+                                "\/diseases",
+                                ""
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Edit Disease",
+                    "request": {
+                        "method": "PATCH",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"data\": {\n        \"type\": \"diseases\",\n        \"id\": \"1\",\n        \"attributes\": {\n            \"name\": \"string\"\n        },\n        \"relationships\": {\n            \"drugs\": {\n                \"data\": [\n                    {\n                        \"type\": \"drugs\",\n                        \"id\": \"1\"\n                    }\n                ]\n            }\n        }\n    }\n}"
+                        },
+                        "url": {
+                            "raw": "{{host}}\/diseases\/1",
+                            "host": [
+                                "{{host}}"
+                            ],
+                            "path": [
+                                "\/diseases",
+                                "1"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Delete Disease",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": "",
+                        "url": {
+                            "raw": "{{host}}\/diseases\/1",
+                            "host": [
+                                "{{host}}"
+                            ],
+                            "path": [
+                                "\/diseases",
+                                "1"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Get Disease",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": "",
+                        "url": {
+                            "raw": "{{host}}\/diseases\/1",
+                            "host": [
+                                "{{host}}"
+                            ],
+                            "path": [
+                                "\/diseases",
+                                "1"
+                            ]
+                        }
+                    }
+                }
+            ]
+        }
+    ]
+}

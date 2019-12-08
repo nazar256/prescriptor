@@ -1,0 +1,74 @@
+version: '2.4'
+
+services:
+  client:
+    image: php-custom
+    working_dir: /client
+    command: echo "Client is meant to be run manually"
+    user: ${PUID}
+    environment:
+      XDEBUG_CONFIG: ${XDEBUG_CONFIG}
+      PHP_IDE_CONFIG: serverName=client
+    volumes:
+      - ./client:/client
+      - ./cache/composer:/.composer/
+      - ./docker/php/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+    depends_on:
+      - nginx
+
+  server:
+    build: ./docker/php
+    image: php-custom
+    cpus: 1
+    working_dir: /server
+    mem_limit: 512M
+    environment:
+      DATABASE_URL: mysql://${MYSQL_USER}:${MYSQL_PASSWORD}@mysql/${MYSQL_DATABASE}
+      MYSQL_HOST: mysql
+      MYSQL_PORT: 3306
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      XDEBUG_CONFIG: ${XDEBUG_CONFIG}
+      PHP_IDE_CONFIG: serverName=server
+      MEMCACHED_HOST: memcached
+    user: ${PUID}
+    depends_on:
+      - mysql
+    volumes:
+      - ./cache/composer:/.composer/
+      - ./server:/server
+      - ./docker/php/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+      - ./docker/php/php.ini:/usr/local/etc/php/php.ini
+
+  nginx:
+    build:
+      context: ./docker/nginx
+      args:
+        PUID: ${PUID}
+    working_dir: /server
+    ports:
+      - 8092:80
+    depends_on:
+      - server
+    volumes_from:
+      - server:ro
+    volumes:
+      - ./docker/nginx/server.conf:/etc/nginx/conf.d/server.conf
+
+  mysql:
+    image: mysql:8.0.18
+    command: --default-authentication-plugin=mysql_native_password
+    ports:
+      - 3234:3306
+    expose:
+      - 3600
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+
+  memcached:
+    image: memcached
+    mem_limit: 128M
