@@ -41,6 +41,8 @@ Result:
  ---------------- -------------- 
 ```
 
+But we have a large number of timeouts while performance increased slightly.
+
 ## v3.0.0
 ```TEST_CONCURRENCY=10```.
 
