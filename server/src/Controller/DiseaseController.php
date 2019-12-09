@@ -8,6 +8,7 @@ use App\JsonApi\Document\Disease\DiseasesDocument;
 use App\JsonApi\Hydrator\Disease\CreateDiseaseHydrator;
 use App\JsonApi\Hydrator\Disease\UpdateDiseaseHydrator;
 use App\JsonApi\Transformer\DiseaseResourceTransformer;
+use App\Queue\JournalQueue;
 use App\Repository\DiseaseRepository;
 use FOD\DBALClickHouse\Connection;
 use Paknahad\JsonApiBundle\Controller\Controller;
@@ -66,15 +67,10 @@ class DiseaseController extends Controller
     /**
      * @Route("/{id}", name="diseases_show", methods="GET")
      */
-    public function show(Disease $disease, Request $request): ResponseInterface
+    public function show(Disease $disease, Request $request, JournalQueue $journalQueue): ResponseInterface
     {
         $patient = $request->get('patient', '');
-
-        //TODO: move to nice service, now I have neither time nor energy, sorry (don't take it too serious, its just a job application task)
-        $doctrine = $this->getDoctrine();
-        /** @var Connection $clickhouse */
-        $clickhouse = $doctrine->getConnection('clickhouse');
-        $clickhouse->insert('request_log', ['name' => $patient, 'date_time' => date('Y-m-d H:i:s'), 'disease_id' => $disease->getId()]);
+        $journalQueue->addJournal($patient, new \DateTime(), $disease->getId());
 
         return $this->jsonApi()->respond()->ok(
             new DiseaseDocument(new DiseaseResourceTransformer()),

@@ -17,12 +17,16 @@ build:
 	# steps above may be executed faster than mysql actually starts, sleep should be fine for this taks right now
 	sleep 15
 	docker-compose run --rm server composer install
+	docker-compose run --rm server ./vendor/bin/rr get -n
 	docker-compose run --rm server bin/console cache:warmup
 	docker-compose run --rm server bin/console doctrine:migrations:migrate -n
 
 load-test:
-	docker-compose run --rm client bin/cli.php 'http://nginx:80/diseases/{{ID}}?include=drugs&patient={{NAME}}' 1 ${DISEASES_AMOUNT} --ttl=${PRESCRIPTION_TIMEOUT_MS} --duration=300 --concurrency=${TEST_CONCURRENCY}
+#	docker-compose up -d --scale server=4 nginx
+#	docker-compose run --rm client bin/cli.php 'http://nginx:80/diseases/{{ID}}?include=drugs&patient={{NAME}}' 1 ${DISEASES_AMOUNT} --ttl=${PRESCRIPTION_TIMEOUT_MS} --duration=300 --concurrency=${TEST_CONCURRENCY}
+	docker-compose up -d --scale roadrunner=4 balancer
+	docker-compose run --rm client bin/cli.php 'http://balancer:80/diseases/{{ID}}?include=drugs&patient={{NAME}}' 1 ${DISEASES_AMOUNT} --ttl=${PRESCRIPTION_TIMEOUT_MS} --duration=300 --concurrency=${TEST_CONCURRENCY}
 
 destroy:
-	docker-compose down
+	docker-compose down --remove-orphans
 	rm -Rf ./server/var/cache/*

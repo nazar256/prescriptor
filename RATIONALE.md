@@ -33,8 +33,13 @@ Pros:
 * JSON:API transformers and controllers can be generated
 * it uses HTTP abstraction layer compatible with RoadRunner - great point for future optimizations
 
-# Journal database
+## Journal database
 
 Clickhouse is meant to be used on raw data, like this journal. It compresses data well, yet searches fast.
 Its insert rate is quite hight (about 300 000 10-column records per second on HDD).
 It should be more than enough for this task.
+
+## Balancer
+
+Nginx is used for extremely fast cofiguration for work to be done in time. Actually haproxy
+should be used.

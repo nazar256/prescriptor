@@ -9,14 +9,6 @@ parameters:
     memcached.config: {distribution: 'modula', compression: false}
 
 services:
-    memcached.doctrine:
-        class: Memcached
-        factory: Symfony\Component\Cache\Adapter\MemcachedAdapter::createConnection
-        arguments: ['%memcached.servers%', '%memcached.config%']
-    doctrine.cache.memcached:
-        class: Doctrine\Common\Cache\MemcachedCache
-        calls:
-            - [ setMemcached, [ '@memcached.doctrine' ] ]
     # default configuration for services in *this* file
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.
@@ -36,3 +28,14 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+
+    App\Queue\KernelTerminateJournalListener:
+        arguments:
+            - '@App\Queue\JournalQueue'
+            - '@doctrine.dbal.clickhouse_connection'
+        tags:
+            - { name: kernel.event_listener, event: kernel.terminate }
+
+    App\Controller\DiseaseController:
+        autowire: true
+        tags: ['controller.service_arguments']
