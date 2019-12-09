@@ -40,8 +40,11 @@ class LoadRunner
                 $responses[] = $client->request('GET', $url, ['timeout' => $timeout, 'max_duration' => $timeout]);
             }
             /** @var ResponseInterface $response */
-            foreach ($responses as $response) {
+            foreach ($client->stream($responses, $timeout) as $response => $chunk) {
                 try {
+                    if (!$chunk->isLast()) {
+                        continue;
+                    }
                     $statusCode = $response->getStatusCode();
                     $info = $response->getInfo();
                 } catch (TransportException $e) {

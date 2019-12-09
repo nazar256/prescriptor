@@ -19,26 +19,28 @@ PRESCRIPTION_TIMEOUT_MS=100
 
 How tests were run: `make bootstrap && make load-test`
 
-## v 2.0.0
+## v 2.0.1
 
 Added journaling to Clickhouse.
-Test param changed ```TEST_CONCURRENCY=10```
+Test param changed ```TEST_CONCURRENCY=10```.
+Server have used all cpu resources.
 
 Result:
 ```
- ---------------- -------------- 
-  10%              19 ms         
-  25%              36 ms         
-  50%              77 ms         
-  75%              88 ms         
-  90%              92 ms         
-  95%              94 ms         
-  99%              98 ms         
-  100%             129.5 ms      
-  errors           99            
-  timeouts         10184, 42.5%  
-  total requests   23950         
- ---------------- -------------- 
+ ---------------- --------------- 
+  10%              0 ms           
+  25%              0 ms           
+  50%              0 ms           
+  75%              0 ms           
+  90%              0 ms           
+  95%              0 ms           
+  99%              0 ms           
+  100%             0 ms           
+  errors           27830          
+  timeouts         27830, 100.0%  
+  total requests   27830          
+ ---------------- --------------- 
+
 
 ```
 
